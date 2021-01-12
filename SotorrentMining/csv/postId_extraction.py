@@ -1,5 +1,5 @@
 import csv
-from properties import edits_test_path,user_p,passwd_p,db_p
+from properties import edits_test_path,user_p,passwd_p,db_p,host_p
 import MySQLdb
 import pprint
 import fileinput
@@ -15,6 +15,7 @@ def search_postId_query_execution(conn,cursor,postId_count,postId_list):
     search_postId_query = "SELECT SOUrl,GHUrl FROM PostReferenceGH WHERE ID = %s"
     for postId_list_item in postId_list:
         cursor.execure(search_postId_query,postId_list_item)
+    # print(postId_list)
     # csv_output_query = "SELECT * FROM PostReferenceGH INTO OUTFILE %s FIELDS TERMINATED BY %s OPTIONALLY ENCLOSED BY %s"
     # cursor.execute(csv_output_query,(query_valiable["save_file"],query_valiable["s"],query_valiable["t"]))
 
@@ -39,7 +40,7 @@ def number_split():
             for i in tab_split:
                 if i.isnumeric():
                     postId_count = postId_count + 1
-                    postId_list.append(postId)
+                    postId_list.append(int(i))
     database_connect(postId_count,postId_list)
 
 def main():
