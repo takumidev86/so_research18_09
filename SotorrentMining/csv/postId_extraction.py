@@ -13,11 +13,28 @@ def search_postId_query_execution(conn,cursor,postId_count,postId_list):
         # "t":'\"'
         }
     search_postId_query = "SELECT SOUrl,GHUrl FROM PostReferenceGH WHERE ID = %s"
+    # search_postId_query = "SELECT SOUrl,GHUrl FROM PostReferenceGH WHERE ID = 180691452"
+    
+    # cursor.execute(search_postId_query,180691452)
+    
+    # listtest = ['180345919',180381695,180395544,180396091,180396665]
+    
+    # for i in listtest:
+    #     print(type(i))
+    #     cursor.execute(search_postId_query,[i])
+    # for (SOUrl, GHUrl) in cursor:
+    #     print(f"{SOUrl} | {GHUrl}")
+    
     for postId_list_item in postId_list:
-        cursor.execure(search_postId_query,postId_list_item)
+        cursor.execute(search_postId_query,[postId_list_item])
+        for (SOUrl, GHUrl) in cursor:
+            print(f"{SOUrl} | {GHUrl}")
+            # print('test')
+            
     # print(postId_list)
     # csv_output_query = "SELECT * FROM PostReferenceGH INTO OUTFILE %s FIELDS TERMINATED BY %s OPTIONALLY ENCLOSED BY %s"
     # cursor.execute(csv_output_query,(query_valiable["save_file"],query_valiable["s"],query_valiable["t"]))
+    
 
 def database_connect(postId_count,postId_list):
     conn = MySQLdb.connect(
@@ -40,7 +57,8 @@ def number_split():
             for i in tab_split:
                 if i.isnumeric():
                     postId_count = postId_count + 1
-                    postId_list.append(int(i))
+                    postId_list.append(i)
+                    # print(i)
     database_connect(postId_count,postId_list)
 
 def main():
