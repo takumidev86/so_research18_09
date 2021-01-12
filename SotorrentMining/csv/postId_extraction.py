@@ -1,40 +1,28 @@
 import csv
-from properties import edits_test_path,user_p,passwd_p,db_p,host_p
+from properties import edits_test_path,user_p,passwd_p,db_p,host_p,SOUrl_GHUrl_path
 import MySQLdb
 import pprint
 import fileinput
 
 
+def csv_write(cursor):
+    
+    with open(SOUrl_GHUrl_path, 'a') as f:
+        writer = csv.writer(f)
+        for (SOUrl, GHUrl) in cursor:
+            writer.writerow([f"{SOUrl}",f"{GHUrl}"])
+
 # クエリ実行
 def search_postId_query_execution(conn,cursor,postId_count,postId_list):
     query_valiable = {
         "edits":edits_test_path,
-        # "s":',',
-        # "t":'\"'
         }
     search_postId_query = "SELECT SOUrl,GHUrl FROM PostReferenceGH WHERE ID = %s"
-    # search_postId_query = "SELECT SOUrl,GHUrl FROM PostReferenceGH WHERE ID = 180691452"
-    
-    # cursor.execute(search_postId_query,180691452)
-    
-    # listtest = ['180345919',180381695,180395544,180396091,180396665]
-    
-    # for i in listtest:
-    #     print(type(i))
-    #     cursor.execute(search_postId_query,[i])
-    # for (SOUrl, GHUrl) in cursor:
-    #     print(f"{SOUrl} | {GHUrl}")
-    
     for postId_list_item in postId_list:
         cursor.execute(search_postId_query,[postId_list_item])
         for (SOUrl, GHUrl) in cursor:
             print(f"{SOUrl} | {GHUrl}")
-            # print('test')
-            
-    # print(postId_list)
-    # csv_output_query = "SELECT * FROM PostReferenceGH INTO OUTFILE %s FIELDS TERMINATED BY %s OPTIONALLY ENCLOSED BY %s"
-    # cursor.execute(csv_output_query,(query_valiable["save_file"],query_valiable["s"],query_valiable["t"]))
-    
+        csv_write(cursor)
 
 def database_connect(postId_count,postId_list):
     conn = MySQLdb.connect(
@@ -58,7 +46,6 @@ def number_split():
                 if i.isnumeric():
                     postId_count = postId_count + 1
                     postId_list.append(i)
-                    # print(i)
     database_connect(postId_count,postId_list)
 
 def main():
