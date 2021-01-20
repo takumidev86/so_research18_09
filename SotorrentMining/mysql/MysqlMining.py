@@ -9,7 +9,7 @@ from properties import user_p,passwd_p,host_p,db_p
 # クエリ実行
 def query_execution(conn,cursor):
     query_valiable = {
-        "save_file":'/home/takumi-k/e/csv/test5.csv',
+        "save_file":'/home/takumi-k/e/csv/test6.csv',
         "s":',',
         "t":'\"'
         }
